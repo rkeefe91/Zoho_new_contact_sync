@@ -1,0 +1,10 @@
+datetime
+pandas
+numpy
+pyodbc    
+azure.storage.blob
+SQLAlchemy
+zcrmsdk
+mysql-connector
+pytz
+
