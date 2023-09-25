@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[96]:
 
 
-from datetime import date
+import os
+from datetime import date, datetime
 import pandas as pd
 import numpy as np
 import pyodbc    
@@ -13,7 +14,7 @@ tz = pytz.timezone('America/Chicago')
 
 
 
-# In[2]:
+# In[97]:
 
 
 server = 'relitix-prod.database.windows.net'
@@ -30,8 +31,16 @@ db = pyodbc.connect(
   pwd=password
 )
 
+server_params = {
+    'driver': driver,
+    'server': server,
+    'database': database,
+    'username': username,
+    'password': password
+}
 
-# In[3]:
+
+# In[98]:
 
 
 import zcrmsdk
@@ -39,11 +48,10 @@ import zcrmsdk
 #https://github.com/zoho/zohocrm-python-sdk
 
 
-# In[4]:
+# In[99]:
 
 
-import os
-from datetime import date, datetime
+
 
 from zcrmsdk.src.com.zoho.crm.api import HeaderMap, ParameterMap
 from zcrmsdk.src.com.zoho.crm.api.attachments import Attachment
@@ -54,11 +62,6 @@ from zcrmsdk.src.com.zoho.crm.api.tags import Tag
 from zcrmsdk.src.com.zoho.crm.api.users import User
 from zcrmsdk.src.com.zoho.crm.api.util import Choice, StreamWrapper
 from zcrmsdk.src.com.zoho.crm.api.fields import LookupField
-
-
-# In[5]:
-
-
 from zcrmsdk.src.com.zoho.crm.api.user_signature import UserSignature
 from zcrmsdk.src.com.zoho.crm.api.dc import USDataCenter
 from zcrmsdk.src.com.zoho.api.authenticator.store import DBStore, FileStore
@@ -68,13 +71,20 @@ from zcrmsdk.src.com.zoho.api.authenticator.oauth_token import OAuthToken, Token
 from zcrmsdk.src.com.zoho.crm.api.sdk_config import SDKConfig
 
 
+# In[100]:
+
+
 class SDKInitializer(object):
 
     @staticmethod
     def initialize():
 
+        base_path = os.getenv('ZOHO_INTEGRATION_PATH', './Zoho integration/config')
+        log_file_path = os.path.join(base_path, 'python_sdk_log.log')
+        tokens_file_path = os.path.join(base_path, 'python_sdk_tokens.txt')
+        resource_path = os.path.join(base_path, '..')
 
-        logger = Logger.get_instance(level=Logger.Levels.INFO, file_path='./config/python_sdk_log.log')
+        logger = Logger.get_instance(level=Logger.Levels.INFO, file_path=log_file_path)
 
         # Create an UserSignature instance that takes user Email as parameter
         user = UserSignature(email='rob@relitix.com')
@@ -84,22 +94,20 @@ class SDKInitializer(object):
         grant_token = "1000.5b04554ebd5340b8ff719a4d611868a4.1fa66c8c4f057f737f14a6a48a95ed7d"      
         redirect_url = 'https://www.relitix.com'
 
-        token = OAuthToken(client_id=client_id, client_secret=client_secret,                           token=grant_token, token_type=TokenType.GRANT,                           redirect_url= redirect_url)
+        token = OAuthToken(client_id=client_id, client_secret=client_secret,                           token=grant_token, token_type=TokenType.GRANT,                           redirect_url=redirect_url)
 
-        store = FileStore(file_path='./config/python_sdk_tokens.txt')
-
+        store = FileStore(file_path=tokens_file_path)
 
         config = SDKConfig(auto_refresh_fields=True, pick_list_validation=False)
-
-        resource_path = './config'
 
         Initializer.initialize(user=user, environment=environment, token=token, store=store, sdk_config=config, resource_path=resource_path, logger=logger)
 
 
-SDKInitializer.initialize()
+
+#SDKInitializer.initialize()
 
 
-# In[6]:
+# In[101]:
 
 
 import datetime
@@ -115,7 +123,7 @@ def get_latest_id(ids_with_dates):
     return latest_tuple[0]
 
 
-# In[7]:
+# In[102]:
 
 
 def get_records_by_email(target_email, verbose = False):
@@ -298,7 +306,7 @@ def get_records_by_email(target_email, verbose = False):
         
 
 
-# In[8]:
+# In[103]:
 
 
 def create_new_record(df,i,account_zid,verbose = False):
@@ -429,7 +437,7 @@ def create_new_record(df,i,account_zid,verbose = False):
     return contact_zid
 
 
-# In[9]:
+# In[104]:
 
 
 def update_contact_record(df,i,contact_zid, verbose = False):
@@ -547,7 +555,164 @@ def update_contact_record(df,i,contact_zid, verbose = False):
     
 
 
-# In[10]:
+# In[105]:
+
+
+from datetime import datetime
+import pandas as pd
+
+def extract_date_from_datetime(datetime_input):
+    """
+    Extracts the date portion from a datetime string or a Pandas Timestamp.
+    
+    Parameters:
+        datetime_input (str or pd.Timestamp): The datetime string in 'YYYY-MM-DD HH:MM:SS.ssssss' format
+                                              or a Pandas Timestamp object
+    
+    Returns:
+        date: A Python date object
+    """
+    try:
+        # Check if input is a Pandas Timestamp and convert it to string
+        if isinstance(datetime_input, pd.Timestamp):
+            datetime_str = datetime_input.strftime('%Y-%m-%d %H:%M:%S.%f')
+        else:
+            datetime_str = datetime_input
+        
+        # Convert the datetime string to a datetime object
+        datetime_obj = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S.%f')
+        
+        # Extract the date
+        date_obj = datetime_obj.date()
+        
+        return date_obj
+    
+    except ValueError as e:
+        print(f"An error occurred: {e}")
+        return None
+
+
+
+# In[106]:
+
+
+def update_contact_record_last_login(df,i,contact_zid, verbose = False):
+
+        # Get instance of RecordOperations Class
+        record_operations = RecordOperations()
+
+        # Get instance of BodyWrapper Class that will contain the request body
+        request = BodyWrapper()
+
+        # List to hold Record instances
+        records_list = []
+
+        # Get instance of Record Class
+        record1 = ZCRMRecord()
+        
+        # ID of the record to be updated
+        record1.set_id(contact_zid)
+        
+
+        record1.add_field_value(Field('Last_login_date'), extract_date_from_datetime(df.most_recent_login.iloc[i]) ) 
+        
+        # Add Record instance to the list
+        records_list.append(record1)
+        
+        
+        request.set_data(records_list)
+
+        header_instance = HeaderMap()
+
+        # Call update_records method that takes BodyWrapper instance and module_api_name as parameter.
+        response = record_operations.update_records('Contacts', request, header_instance)
+
+        if response is not None:
+            # Get the status code from response
+            if verbose:
+                print('Status Code: ' + str(response.get_status_code()))
+
+            # Get object from response
+            response_object = response.get_object()
+
+            if response_object is not None:
+
+                # Check if expected ActionWrapper instance is received.
+                if isinstance(response_object, ActionWrapper):
+
+                    # Get the list of obtained ActionResponse instances
+                    action_response_list = response_object.get_data()
+
+                    for action_response in action_response_list:
+
+                        # Check if the request is successful
+                        if isinstance(action_response, SuccessResponse):
+                            # Get the Status
+                            if verbose:
+                                print("Status: " + action_response.get_status().get_value())
+
+                            # Get the Code
+                            if verbose:
+                                print("Code: " + action_response.get_code().get_value())
+
+                            if verbose:
+                                print("Details")
+
+                            # Get the details dict
+                            details = action_response.get_details()
+
+                            for key, value in details.items():
+                                if verbose:
+                                    print(key + ' : ' + str(value))
+
+                            # Get the Message
+                            if verbose:
+                                print("Message: " + action_response.get_message().get_value())
+
+                        # Check if the request returned an exception
+                        elif isinstance(action_response, APIException):
+                            # Get the Status
+                            print("Status: " + action_response.get_status().get_value())
+
+                            # Get the Code
+                            print("Code: " + action_response.get_code().get_value())
+
+                            print("Details")
+
+                            # Get the details dict
+                            details = action_response.get_details()
+
+                            for key, value in details.items():
+                                print(key + ' : ' + str(value))
+
+                            # Get the Message
+                            print("Message: " + action_response.get_message().get_value())
+
+                # Check if the request returned an exception
+                elif isinstance(response_object, APIException):
+                    # Get the Status
+                    print("Status: " + response_object.get_status().get_value())
+
+                    # Get the Code
+                    print("Code: " + response_object.get_code().get_value())
+
+                    print("Details")
+
+                    # Get the details dict
+                    details = response_object.get_details()
+
+                    for key, value in details.items():
+                        print(key + ' : ' + str(value))
+
+                    # Get the Message
+                    print("Message: " + response_object.get_message().get_value())
+ 
+        
+    
+    
+
+
+# In[107]:
 
 
 def get_account_id_by_name(target_account_name, verbose=False):
@@ -730,7 +895,7 @@ def get_account_id_by_name(target_account_name, verbose=False):
         
 
 
-# In[11]:
+# In[108]:
 
 
 def get_account_data(zid, verbose = False):
@@ -837,7 +1002,7 @@ def get_account_data(zid, verbose = False):
                         return(str(record.get_key_value('Account_Name')),record.get_key_value('Primary_MLS'),zid)
 
 
-# In[12]:
+# In[109]:
 
 
 def find_data(data_list, account_name):
@@ -858,7 +1023,7 @@ def find_data(data_list, account_name):
         return None
 
 
-# In[13]:
+# In[110]:
 
 
 def get_zoho_acct_id(df_accts, RelitixAccountId):
@@ -873,7 +1038,7 @@ def get_zoho_acct_id(df_accts, RelitixAccountId):
         return None
 
 
-# In[14]:
+# In[111]:
 
 
 def locate_account_zid(account_name,RelitixAccountId,df_accts):
@@ -917,7 +1082,7 @@ def locate_account_zid(account_name,RelitixAccountId,df_accts):
         return int(acct_id_from_table)
 
 
-# In[15]:
+# In[112]:
 
 
 def store_zid_in_table(df,i,contact_zid):
@@ -950,34 +1115,55 @@ def store_zid_in_table(df,i,contact_zid):
     cnxn.close()    
 
 
-# In[16]:
+# In[113]:
 
 
-cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+password)
-query = "select * from portal.py_portal_users"
-df = pd.read_sql(query, cnxn)
-cnxn.close()
+def fetch_data_from_server(table_name, server_params):
+    try:
+        connection_string = 'DRIVER={};SERVER={};PORT=1433;DATABASE={};UID={};PWD={}'.format(
+            server_params['driver'],
+            server_params['server'],
+            server_params['database'],
+            server_params['username'],
+            server_params['password']
+        )
+        
+        cnxn = pyodbc.connect(connection_string)
+        
+        query = f"select * from {table_name}"
+        df = pd.read_sql(query, cnxn)
+        
+        return df
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return None
+    finally:
+        if 'cnxn' in locals() or 'cnxn' in globals():
+            cnxn.close()
 
 
-# In[17]:
+# START CODE HERE- Add new users
+
+# In[114]:
 
 
-cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+password)
-query = "select * from portal.accounts_zoho_ids"
-df_acct = pd.read_sql(query, cnxn)
-cnxn.close()
+df = fetch_data_from_server('portal.py_portal_users', server_params)
 
 
-# In[18]:
+# In[115]:
 
 
-#df.dtypes
+df_acct = fetch_data_from_server('portal.accounts_zoho_ids', server_params)
 
 
-# In[19]:
+# In[116]:
 
 
-### START CODE HERE ###############
+SDKInitializer.initialize()
+
+
+# In[117]:
+
 
 created_contacts = 0
 updated_contacts = 0
@@ -1003,7 +1189,7 @@ for i in range(df.shape[0]):
         contact_zid = None    
         contact_zid = create_new_record(df,i,account_zid)
         if contact_zid == None:
-            print('No contact created' + df.UserEmail.iloc[i])
+            print('No contact created')
             continue
         else:
             store_zid_in_table(df,i,contact_zid)
@@ -1022,4 +1208,30 @@ print("Updated contacts: " + str(updated_contacts))
     
     
     
+
+
+# Update last login date
+
+# In[118]:
+
+
+df_li = fetch_data_from_server('portal.last_3_days_logins', server_params)
+
+
+# In[119]:
+
+
+# Initialize the progress bar
+total_rows = len(df_li)
+print("Progress: ", end="")
+
+# Iterate through each row and call update_contact_record
+for index, (df_index, row) in enumerate(df_li.iterrows()):
+    update_contact_record_last_login(df_li, df_index, row['zoho_id'], verbose=False)
+    
+    # Update progress bar
+    completed = (index + 1) / total_rows * 100
+    print(f"\rProgress: [{int(completed // 10) * '#'}{(10 - int(completed // 10)) * ' '}] {completed:.2f}%", end="")
+    
+print("\nCompleted!")
 
