@@ -4,6 +4,9 @@ FROM python:3.8-slim-buster
 # build variables.
 ENV DEBIAN_FRONTEND noninteractive
 
+# Set zoho environment variable
+ENV ZOHO_INTEGRATION_PATH /app/config
+
 # install Microsoft SQL Server requirements.
 ENV ACCEPT_EULA=Y
 RUN apt-get update -y && apt-get update \
@@ -22,6 +25,8 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
 
 RUN mkdir -p /app/config
 COPY python_sdk_tokens.txt /app/config
+
+
 
 # upgrade pip and install requirements.
 COPY /requirements.txt /requirements.txt
