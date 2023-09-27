@@ -110,11 +110,11 @@ class SDKInitializer(object):
 # In[101]:
 
 
-import datetime
+import datetime as dt
 
 def get_latest_id(ids_with_dates):
     # Convert date strings to datetime objects
-    ids_with_dates = [(i, datetime.datetime.strptime(d, '%Y-%m-%d %H:%M:%S%z')) for i,d in ids_with_dates]
+    ids_with_dates = [(i, dt.datetime.strptime(d, '%Y-%m-%d %H:%M:%S%z')) for i,d in ids_with_dates]
     
     # Find the tuple with the most recent datetime
     latest_tuple = max(ids_with_dates, key=lambda x: x[1])
