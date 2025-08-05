@@ -1,0 +1,235 @@
+2025-08-05 10:52:51,014 - INFO - Starting contact sync process for 7 users
+2025-08-05 10:52:51,020 - INFO - Processing user 1/7: chanell.marko@orchard.com
+2025-08-05 10:52:51,711 - INFO - User chanell.marko@orchard.com not found in Zoho, creating new contact
+2025-08-05 10:52:51,715 - INFO - Attempting to create contact for user: chanell.marko@orchard.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 10:52:52,276 - INFO - Response status code for chanell.marko@orchard.com: 202
+2025-08-05 10:52:52,280 - ERROR - API_EXCEPTION - Failed to create contact for chanell.marko@orchard.com
+2025-08-05 10:52:52,284 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 10:52:52,288 - ERROR -   Status: error
+2025-08-05 10:52:52,291 - ERROR -   Code: INVALID_DATA
+2025-08-05 10:52:52,295 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 10:52:52,298 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 10:52:52,301 - ERROR - CONTACT_CREATION_FAILED - No contact created for chanell.marko@orchard.com
+2025-08-05 10:52:52,303 - INFO - Processing user 2/7: hello@matthewrathbun.com
+2025-08-05 10:52:52,808 - INFO - User hello@matthewrathbun.com not found in Zoho, creating new contact
+2025-08-05 10:52:52,811 - INFO - Attempting to create contact for user: hello@matthewrathbun.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 10:52:53,366 - INFO - Response status code for hello@matthewrathbun.com: 202
+2025-08-05 10:52:53,368 - ERROR - API_EXCEPTION - Failed to create contact for hello@matthewrathbun.com
+2025-08-05 10:52:53,369 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 10:52:53,374 - ERROR -   Status: error
+2025-08-05 10:52:53,376 - ERROR -   Code: INVALID_DATA
+2025-08-05 10:52:53,378 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 10:52:53,383 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 10:52:53,386 - ERROR - CONTACT_CREATION_FAILED - No contact created for hello@matthewrathbun.com
+2025-08-05 10:52:53,389 - INFO - Processing user 3/7: Jim@BetterPAagents.com
+2025-08-05 10:52:53,964 - INFO - User Jim@BetterPAagents.com not found in Zoho, creating new contact
+2025-08-05 10:52:53,967 - INFO - Attempting to create contact for user: Jim@BetterPAagents.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 10:52:54,606 - INFO - Response status code for Jim@BetterPAagents.com: 202
+2025-08-05 10:52:54,607 - ERROR - API_EXCEPTION - Failed to create contact for Jim@BetterPAagents.com
+2025-08-05 10:52:54,608 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 10:52:54,610 - ERROR -   Status: error
+2025-08-05 10:52:54,611 - ERROR -   Code: INVALID_DATA
+2025-08-05 10:52:54,612 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 10:52:54,613 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 10:52:54,614 - ERROR - CONTACT_CREATION_FAILED - No contact created for Jim@BetterPAagents.com
+2025-08-05 10:52:54,616 - INFO - Processing user 4/7: josephine@relitix.com
+2025-08-05 10:52:55,098 - INFO - User josephine@relitix.com not found in Zoho, creating new contact
+2025-08-05 10:52:55,101 - INFO - Attempting to create contact for user: josephine@relitix.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 10:52:55,671 - INFO - Response status code for josephine@relitix.com: 202
+2025-08-05 10:52:55,673 - ERROR - API_EXCEPTION - Failed to create contact for josephine@relitix.com
+2025-08-05 10:52:55,674 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 10:52:55,676 - ERROR -   Status: error
+2025-08-05 10:52:55,678 - ERROR -   Code: INVALID_DATA
+2025-08-05 10:52:55,679 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 10:52:55,681 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 10:52:55,684 - ERROR - CONTACT_CREATION_FAILED - No contact created for josephine@relitix.com
+2025-08-05 10:52:55,686 - INFO - Processing user 5/7: muhammadarshad.ciit@gmail.com
+2025-08-05 10:52:56,242 - INFO - User muhammadarshad.ciit@gmail.com not found in Zoho, creating new contact
+2025-08-05 10:52:56,604 - ERROR - ACCOUNT_NOT_FOUND - No account exists in Zoho: Trial Account (Relitix ID: RTX000061) for user muhammadarshad.ciit@gmail.com
+2025-08-05 10:52:56,606 - INFO - Processing user 6/7: pranteekpatnaik@gmail.com
+2025-08-05 10:52:57,217 - INFO - User pranteekpatnaik@gmail.com not found in Zoho, creating new contact
+2025-08-05 10:52:57,221 - INFO - Attempting to create contact for user: pranteekpatnaik@gmail.com, Account: Keller Williams Horizon, Account_ZID: 2308461000064331096
+2025-08-05 10:52:57,829 - INFO - Response status code for pranteekpatnaik@gmail.com: 202
+2025-08-05 10:52:57,831 - ERROR - API_EXCEPTION - Failed to create contact for pranteekpatnaik@gmail.com
+2025-08-05 10:52:57,833 - ERROR -   Account: Keller Williams Horizon (ZID: 2308461000064331096)
+2025-08-05 10:52:57,837 - ERROR -   Status: error
+2025-08-05 10:52:57,841 - ERROR -   Code: INVALID_DATA
+2025-08-05 10:52:57,844 - ERROR -   Message: invalid data
+2025-08-05 10:52:57,848 - ERROR -   Detail - api_name: Mobile
+2025-08-05 10:52:57,851 - ERROR -   Detail - expected_data_type: phone
+2025-08-05 10:52:57,854 - ERROR - CONTACT_CREATION_FAILED - No contact created for pranteekpatnaik@gmail.com
+2025-08-05 10:52:57,856 - INFO - Processing user 7/7: test@getbrokerkit.com
+2025-08-05 10:52:58,361 - INFO - User test@getbrokerkit.com not found in Zoho, creating new contact
+2025-08-05 10:52:58,364 - INFO - Attempting to create contact for user: test@getbrokerkit.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 10:52:58,961 - INFO - Response status code for test@getbrokerkit.com: 202
+2025-08-05 10:52:58,964 - ERROR - API_EXCEPTION - Failed to create contact for test@getbrokerkit.com
+2025-08-05 10:52:58,966 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 10:52:58,970 - ERROR -   Status: error
+2025-08-05 10:52:58,973 - ERROR -   Code: INVALID_DATA
+2025-08-05 10:52:58,977 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 10:52:58,981 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 10:52:58,985 - ERROR - CONTACT_CREATION_FAILED - No contact created for test@getbrokerkit.com
+2025-08-05 10:52:58,989 - INFO - Contact sync process completed:
+2025-08-05 10:52:58,991 - INFO -   Created contacts: 0
+2025-08-05 10:52:58,994 - INFO -   Updated contacts: 0
+2025-08-05 10:52:58,996 - INFO -   Total processed: 0
+2025-08-05 11:03:25,507 - INFO - Starting contact sync process for 7 users
+2025-08-05 11:03:25,507 - INFO - Starting contact sync process for 7 users
+2025-08-05 11:03:25,510 - INFO - Processing user 1/7: chanell.marko@orchard.com
+2025-08-05 11:03:25,510 - INFO - Processing user 1/7: chanell.marko@orchard.com
+2025-08-05 11:03:26,239 - INFO - User chanell.marko@orchard.com not found in Zoho, creating new contact
+2025-08-05 11:03:26,239 - INFO - User chanell.marko@orchard.com not found in Zoho, creating new contact
+2025-08-05 11:03:26,243 - INFO - Attempting to create contact for user: chanell.marko@orchard.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 11:03:26,243 - INFO - Attempting to create contact for user: chanell.marko@orchard.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 11:03:26,245 - INFO - Cleaned mobile for chanell.marko@orchard.com: '' -> 'None'
+2025-08-05 11:03:26,245 - INFO - Cleaned mobile for chanell.marko@orchard.com: '' -> 'None'
+2025-08-05 11:03:26,247 - WARNING - Skipping invalid mobile for chanell.marko@orchard.com: ''
+2025-08-05 11:03:26,247 - WARNING - Skipping invalid mobile for chanell.marko@orchard.com: ''
+2025-08-05 11:03:26,968 - INFO - Response status code for chanell.marko@orchard.com: 202
+2025-08-05 11:03:26,968 - INFO - Response status code for chanell.marko@orchard.com: 202
+2025-08-05 11:03:26,970 - ERROR - API_EXCEPTION - Failed to create contact for chanell.marko@orchard.com
+2025-08-05 11:03:26,970 - ERROR - API_EXCEPTION - Failed to create contact for chanell.marko@orchard.com
+2025-08-05 11:03:26,972 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 11:03:26,972 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 11:03:26,974 - ERROR -   Status: error
+2025-08-05 11:03:26,974 - ERROR -   Status: error
+2025-08-05 11:03:26,976 - ERROR -   Code: INVALID_DATA
+2025-08-05 11:03:26,976 - ERROR -   Code: INVALID_DATA
+2025-08-05 11:03:26,978 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 11:03:26,978 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 11:03:26,980 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 11:03:26,980 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 11:03:26,985 - ERROR - CONTACT_CREATION_FAILED - No contact created for chanell.marko@orchard.com
+2025-08-05 11:03:26,985 - ERROR - CONTACT_CREATION_FAILED - No contact created for chanell.marko@orchard.com
+2025-08-05 11:03:26,987 - INFO - Processing user 2/7: hello@matthewrathbun.com
+2025-08-05 11:03:26,987 - INFO - Processing user 2/7: hello@matthewrathbun.com
+2025-08-05 11:03:27,668 - INFO - User hello@matthewrathbun.com not found in Zoho, creating new contact
+2025-08-05 11:03:27,668 - INFO - User hello@matthewrathbun.com not found in Zoho, creating new contact
+2025-08-05 11:03:27,673 - INFO - Attempting to create contact for user: hello@matthewrathbun.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 11:03:27,673 - INFO - Attempting to create contact for user: hello@matthewrathbun.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 11:03:27,677 - INFO - Cleaned mobile for hello@matthewrathbun.com: '' -> 'None'
+2025-08-05 11:03:27,677 - INFO - Cleaned mobile for hello@matthewrathbun.com: '' -> 'None'
+2025-08-05 11:03:27,681 - WARNING - Skipping invalid mobile for hello@matthewrathbun.com: ''
+2025-08-05 11:03:27,681 - WARNING - Skipping invalid mobile for hello@matthewrathbun.com: ''
+2025-08-05 11:03:28,036 - INFO - Response status code for hello@matthewrathbun.com: 202
+2025-08-05 11:03:28,036 - INFO - Response status code for hello@matthewrathbun.com: 202
+2025-08-05 11:03:28,039 - ERROR - API_EXCEPTION - Failed to create contact for hello@matthewrathbun.com
+2025-08-05 11:03:28,039 - ERROR - API_EXCEPTION - Failed to create contact for hello@matthewrathbun.com
+2025-08-05 11:03:28,044 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 11:03:28,044 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 11:03:28,052 - ERROR -   Status: error
+2025-08-05 11:03:28,052 - ERROR -   Status: error
+2025-08-05 11:03:28,058 - ERROR -   Code: INVALID_DATA
+2025-08-05 11:03:28,058 - ERROR -   Code: INVALID_DATA
+2025-08-05 11:03:28,062 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 11:03:28,062 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 11:03:28,067 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 11:03:28,067 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 11:03:28,071 - ERROR - CONTACT_CREATION_FAILED - No contact created for hello@matthewrathbun.com
+2025-08-05 11:03:28,071 - ERROR - CONTACT_CREATION_FAILED - No contact created for hello@matthewrathbun.com
+2025-08-05 11:03:28,075 - INFO - Processing user 3/7: Jim@BetterPAagents.com
+2025-08-05 11:03:28,075 - INFO - Processing user 3/7: Jim@BetterPAagents.com
+2025-08-05 11:03:28,457 - INFO - User Jim@BetterPAagents.com not found in Zoho, creating new contact
+2025-08-05 11:03:28,457 - INFO - User Jim@BetterPAagents.com not found in Zoho, creating new contact
+2025-08-05 11:03:28,459 - INFO - Attempting to create contact for user: Jim@BetterPAagents.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 11:03:28,459 - INFO - Attempting to create contact for user: Jim@BetterPAagents.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 11:03:28,463 - INFO - Cleaned mobile for Jim@BetterPAagents.com: '' -> 'None'
+2025-08-05 11:03:28,463 - INFO - Cleaned mobile for Jim@BetterPAagents.com: '' -> 'None'
+2025-08-05 11:03:28,465 - WARNING - Skipping invalid mobile for Jim@BetterPAagents.com: ''
+2025-08-05 11:03:28,465 - WARNING - Skipping invalid mobile for Jim@BetterPAagents.com: ''
+2025-08-05 11:03:29,074 - INFO - Response status code for Jim@BetterPAagents.com: 202
+2025-08-05 11:03:29,074 - INFO - Response status code for Jim@BetterPAagents.com: 202
+2025-08-05 11:03:29,079 - ERROR - API_EXCEPTION - Failed to create contact for Jim@BetterPAagents.com
+2025-08-05 11:03:29,079 - ERROR - API_EXCEPTION - Failed to create contact for Jim@BetterPAagents.com
+2025-08-05 11:03:29,084 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 11:03:29,084 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 11:03:29,089 - ERROR -   Status: error
+2025-08-05 11:03:29,089 - ERROR -   Status: error
+2025-08-05 11:03:29,091 - ERROR -   Code: INVALID_DATA
+2025-08-05 11:03:29,091 - ERROR -   Code: INVALID_DATA
+2025-08-05 11:03:29,094 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 11:03:29,094 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 11:03:29,097 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 11:03:29,097 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 11:03:29,099 - ERROR - CONTACT_CREATION_FAILED - No contact created for Jim@BetterPAagents.com
+2025-08-05 11:03:29,099 - ERROR - CONTACT_CREATION_FAILED - No contact created for Jim@BetterPAagents.com
+2025-08-05 11:03:29,105 - INFO - Processing user 4/7: josephine@relitix.com
+2025-08-05 11:03:29,105 - INFO - Processing user 4/7: josephine@relitix.com
+2025-08-05 11:03:29,685 - INFO - User josephine@relitix.com not found in Zoho, creating new contact
+2025-08-05 11:03:29,685 - INFO - User josephine@relitix.com not found in Zoho, creating new contact
+2025-08-05 11:03:29,688 - INFO - Attempting to create contact for user: josephine@relitix.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 11:03:29,688 - INFO - Attempting to create contact for user: josephine@relitix.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 11:03:29,690 - INFO - Cleaned mobile for josephine@relitix.com: '' -> 'None'
+2025-08-05 11:03:29,690 - INFO - Cleaned mobile for josephine@relitix.com: '' -> 'None'
+2025-08-05 11:03:29,694 - WARNING - Skipping invalid mobile for josephine@relitix.com: ''
+2025-08-05 11:03:29,694 - WARNING - Skipping invalid mobile for josephine@relitix.com: ''
+2025-08-05 11:03:30,196 - INFO - Response status code for josephine@relitix.com: 202
+2025-08-05 11:03:30,196 - INFO - Response status code for josephine@relitix.com: 202
+2025-08-05 11:03:30,199 - ERROR - API_EXCEPTION - Failed to create contact for josephine@relitix.com
+2025-08-05 11:03:30,199 - ERROR - API_EXCEPTION - Failed to create contact for josephine@relitix.com
+2025-08-05 11:03:30,206 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 11:03:30,206 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 11:03:30,211 - ERROR -   Status: error
+2025-08-05 11:03:30,211 - ERROR -   Status: error
+2025-08-05 11:03:30,215 - ERROR -   Code: INVALID_DATA
+2025-08-05 11:03:30,215 - ERROR -   Code: INVALID_DATA
+2025-08-05 11:03:30,219 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 11:03:30,219 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 11:03:30,222 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 11:03:30,222 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 11:03:30,228 - ERROR - CONTACT_CREATION_FAILED - No contact created for josephine@relitix.com
+2025-08-05 11:03:30,228 - ERROR - CONTACT_CREATION_FAILED - No contact created for josephine@relitix.com
+2025-08-05 11:03:30,231 - INFO - Processing user 5/7: muhammadarshad.ciit@gmail.com
+2025-08-05 11:03:30,231 - INFO - Processing user 5/7: muhammadarshad.ciit@gmail.com
+2025-08-05 11:03:30,770 - INFO - User muhammadarshad.ciit@gmail.com not found in Zoho, creating new contact
+2025-08-05 11:03:30,770 - INFO - User muhammadarshad.ciit@gmail.com not found in Zoho, creating new contact
+2025-08-05 11:03:31,366 - ERROR - ACCOUNT_NOT_FOUND - No account exists in Zoho: Trial Account (Relitix ID: RTX000061) for user muhammadarshad.ciit@gmail.com
+2025-08-05 11:03:31,366 - ERROR - ACCOUNT_NOT_FOUND - No account exists in Zoho: Trial Account (Relitix ID: RTX000061) for user muhammadarshad.ciit@gmail.com
+2025-08-05 11:03:31,372 - INFO - Processing user 6/7: pranteekpatnaik@gmail.com
+2025-08-05 11:03:31,372 - INFO - Processing user 6/7: pranteekpatnaik@gmail.com
+2025-08-05 11:03:32,081 - INFO - User pranteekpatnaik@gmail.com not found in Zoho, creating new contact
+2025-08-05 11:03:32,081 - INFO - User pranteekpatnaik@gmail.com not found in Zoho, creating new contact
+2025-08-05 11:03:32,089 - INFO - Attempting to create contact for user: pranteekpatnaik@gmail.com, Account: Keller Williams Horizon, Account_ZID: 2308461000064331096
+2025-08-05 11:03:32,089 - INFO - Attempting to create contact for user: pranteekpatnaik@gmail.com, Account: Keller Williams Horizon, Account_ZID: 2308461000064331096
+2025-08-05 11:03:33,520 - INFO - Response status code for pranteekpatnaik@gmail.com: 201
+2025-08-05 11:03:33,520 - INFO - Response status code for pranteekpatnaik@gmail.com: 201
+2025-08-05 11:03:33,525 - INFO - SUCCESS - Contact created for pranteekpatnaik@gmail.com: Status: success
+2025-08-05 11:03:33,525 - INFO - SUCCESS - Contact created for pranteekpatnaik@gmail.com: Status: success
+2025-08-05 11:03:33,531 - INFO - Contact ID created for pranteekpatnaik@gmail.com: 2308461000070567262
+2025-08-05 11:03:33,531 - INFO - Contact ID created for pranteekpatnaik@gmail.com: 2308461000070567262
+2025-08-05 11:03:33,694 - INFO - Successfully created contact for pranteekpatnaik@gmail.com with ID 2308461000070567262
+2025-08-05 11:03:33,694 - INFO - Successfully created contact for pranteekpatnaik@gmail.com with ID 2308461000070567262
+2025-08-05 11:03:33,697 - INFO - Processing user 7/7: test@getbrokerkit.com
+2025-08-05 11:03:33,697 - INFO - Processing user 7/7: test@getbrokerkit.com
+2025-08-05 11:03:34,232 - INFO - User test@getbrokerkit.com not found in Zoho, creating new contact
+2025-08-05 11:03:34,232 - INFO - User test@getbrokerkit.com not found in Zoho, creating new contact
+2025-08-05 11:03:34,237 - INFO - Attempting to create contact for user: test@getbrokerkit.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 11:03:34,237 - INFO - Attempting to create contact for user: test@getbrokerkit.com, Account: Michael Demo Account, Account_ZID: 2308461000018992163
+2025-08-05 11:03:34,246 - INFO - Cleaned mobile for test@getbrokerkit.com: '' -> 'None'
+2025-08-05 11:03:34,246 - INFO - Cleaned mobile for test@getbrokerkit.com: '' -> 'None'
+2025-08-05 11:03:34,254 - WARNING - Skipping invalid mobile for test@getbrokerkit.com: ''
+2025-08-05 11:03:34,254 - WARNING - Skipping invalid mobile for test@getbrokerkit.com: ''
+2025-08-05 11:03:34,894 - INFO - Response status code for test@getbrokerkit.com: 202
+2025-08-05 11:03:34,894 - INFO - Response status code for test@getbrokerkit.com: 202
+2025-08-05 11:03:34,898 - ERROR - API_EXCEPTION - Failed to create contact for test@getbrokerkit.com
+2025-08-05 11:03:34,898 - ERROR - API_EXCEPTION - Failed to create contact for test@getbrokerkit.com
+2025-08-05 11:03:34,904 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 11:03:34,904 - ERROR -   Account: Michael Demo Account (ZID: 2308461000018992163)
+2025-08-05 11:03:34,909 - ERROR -   Status: error
+2025-08-05 11:03:34,909 - ERROR -   Status: error
+2025-08-05 11:03:34,917 - ERROR -   Code: INVALID_DATA
+2025-08-05 11:03:34,917 - ERROR -   Code: INVALID_DATA
+2025-08-05 11:03:34,921 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 11:03:34,921 - ERROR -   Message: You do not have sufficient permission to associate this record. Contact your administrator.
+2025-08-05 11:03:34,929 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 11:03:34,929 - ERROR -   Detail - api_name: Account_Name
+2025-08-05 11:03:34,935 - ERROR - CONTACT_CREATION_FAILED - No contact created for test@getbrokerkit.com
+2025-08-05 11:03:34,935 - ERROR - CONTACT_CREATION_FAILED - No contact created for test@getbrokerkit.com
+2025-08-05 11:03:34,941 - INFO - Contact sync process completed:
+2025-08-05 11:03:34,941 - INFO - Contact sync process completed:
+2025-08-05 11:03:34,947 - INFO -   Created contacts: 1
+2025-08-05 11:03:34,947 - INFO -   Created contacts: 1
+2025-08-05 11:03:34,953 - INFO -   Updated contacts: 0
+2025-08-05 11:03:34,953 - INFO -   Updated contacts: 0
+2025-08-05 11:03:34,957 - INFO -   Total processed: 1
+2025-08-05 11:03:34,957 - INFO -   Total processed: 1

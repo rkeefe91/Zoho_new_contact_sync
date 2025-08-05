@@ -21,10 +21,12 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
   && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
 
-# Add directory for Zoho tokens
-
+# Add directory for Zoho tokens and logs
 RUN mkdir -p /app/config
 COPY python_sdk_tokens.txt /app/config
+
+# Ensure proper permissions for log files
+RUN chmod 755 /app/config
 
 
 

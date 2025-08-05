@@ -10,7 +10,42 @@ import pandas as pd
 import numpy as np
 import pyodbc    
 import pytz
+import logging
 tz = pytz.timezone('America/Chicago')
+
+# Set up enhanced logging
+def setup_detailed_logger():
+    logger = logging.getLogger('zoho_sync')
+    logger.setLevel(logging.INFO)
+    
+    # Ensure config directory exists (important for Docker containers)
+    config_dir = './config'
+    if not os.path.exists(config_dir):
+        os.makedirs(config_dir, exist_ok=True)
+    
+    # Create file handler for detailed logs
+    log_file_path = os.path.join(config_dir, 'zoho_sync_errors.log')
+    file_handler = logging.FileHandler(log_file_path, mode='a', encoding='utf-8')
+    file_handler.setLevel(logging.INFO)
+    
+    # Create console handler for immediate feedback (important for Docker logs)
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    
+    # Create formatter
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(formatter)
+    console_handler.setFormatter(formatter)
+    
+    # Avoid duplicate handlers if logger already exists
+    if not logger.handlers:
+        logger.addHandler(file_handler)
+        logger.addHandler(console_handler)
+    
+    return logger
+
+# Initialize the logger
+detailed_logger = setup_detailed_logger()
 
 
 
@@ -80,9 +115,9 @@ class SDKInitializer(object):
     def initialize():
 
         base_path = os.getenv('ZOHO_INTEGRATION_PATH', './Zoho integration/config')
-        log_file_path = os.path.join(base_path, 'python_sdk_log.log')
-        tokens_file_path = os.path.join(base_path, 'python_sdk_tokens.txt')
-        resource_path = os.path.join(base_path, '..')
+        log_file_path = './config/python_sdk_log.log'
+        tokens_file_path = './config/python_sdk_tokens.txt'
+        resource_path = './config'
 
         logger = Logger.get_instance(level=Logger.Levels.INFO, file_path=log_file_path)
 
@@ -111,6 +146,70 @@ class SDKInitializer(object):
 
 
 import datetime as dt
+import re
+
+def clean_phone_number(phone_str):
+    """
+    Clean phone number by removing hidden control characters and invalid characters.
+    Returns a properly formatted phone number or None if invalid.
+    """
+    if phone_str is None or pd.isna(phone_str):
+        return None
+    
+    # Convert to string if not already
+    phone_str = str(phone_str)
+    
+    # Log the original value for debugging
+    detailed_logger.debug(f"Original phone value: {repr(phone_str)}")
+    
+    # Remove all control characters (ASCII 0-31 and 127)
+    # This includes hidden characters like \x00, \x01, etc.
+    cleaned = ''.join(char for char in phone_str if ord(char) >= 32 and ord(char) != 127)
+    
+    # Remove any remaining non-printable characters
+    cleaned = re.sub(r'[\x00-\x1f\x7f-\x9f]', '', cleaned)
+    
+    # Remove extra whitespace
+    cleaned = cleaned.strip()
+    
+    # If empty after cleaning, return None
+    if not cleaned or cleaned.lower() in ['null', 'none', 'n/a', '']:
+        return None
+    
+    # Remove any non-digit, non-space, non-dash, non-parentheses, non-plus characters
+    # Keep only valid phone number characters
+    cleaned = re.sub(r'[^\d\s\-\(\)\+\.]', '', cleaned)
+    
+    # Remove excessive spaces and normalize
+    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+    
+    # If still empty or too short, return None
+    if not cleaned or len(re.sub(r'[^\d]', '', cleaned)) < 7:
+        return None
+    
+    detailed_logger.debug(f"Cleaned phone value: {repr(cleaned)}")
+    return cleaned
+
+def clean_text_field(text_str):
+    """
+    Clean text fields by removing control characters while preserving valid content.
+    """
+    if text_str is None or pd.isna(text_str):
+        return None
+    
+    # Convert to string if not already
+    text_str = str(text_str)
+    
+    # Remove control characters but keep printable ones
+    cleaned = ''.join(char for char in text_str if ord(char) >= 32 and ord(char) != 127)
+    
+    # Remove any remaining non-printable characters
+    cleaned = re.sub(r'[\x00-\x1f\x7f-\x9f]', '', cleaned)
+    
+    # Clean up whitespace
+    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+    
+    return cleaned if cleaned else None
 
 def get_latest_id(ids_with_dates):
     # Convert date strings to datetime objects
@@ -309,7 +408,7 @@ def get_records_by_email(target_email, verbose = False):
 # In[103]:
 
 
-def create_new_record(df,i,account_zid,verbose = False):
+def create_new_record(df,i,account_zid,verbose = True):
 
     contact_zid = None
 
@@ -325,16 +424,38 @@ def create_new_record(df,i,account_zid,verbose = False):
     # Get instance of Record Class
     record = ZCRMRecord()
 
+    # Log the attempt with user details
+    user_email = df.UserEmail.iloc[i]
+    account_name = df.AccountName.iloc[i]
+    detailed_logger.info(f"Attempting to create contact for user: {user_email}, Account: {account_name}, Account_ZID: {account_zid}")
 
-
-    record.add_field_value(Field.Contacts.last_name(), df.LastName.iloc[i])
-
-    record.add_field_value(Field.Contacts.first_name(), df.FirstName.iloc[i])
-
-    record.add_field_value(Field('Email'), df.UserEmail.iloc[i] )
-    record.add_field_value(Field('Mobile'), df.UserCellPhone.iloc[i] )    
-    record.add_field_value(Field('LinkedIn'), df.LinkedInId.iloc[i] )        
-    record.add_field_value(Field('Acct_created_in_portal'), tz.localize(df.CreatedOn.iloc[i]) ) 
+    # Clean and validate data before adding to record
+    cleaned_mobile = clean_phone_number(df.UserCellPhone.iloc[i])
+    cleaned_linkedin = clean_text_field(df.LinkedInId.iloc[i])
+    cleaned_email = clean_text_field(df.UserEmail.iloc[i])
+    cleaned_first_name = clean_text_field(df.FirstName.iloc[i])
+    cleaned_last_name = clean_text_field(df.LastName.iloc[i])
+    
+    # Log data cleaning results
+    if cleaned_mobile != df.UserCellPhone.iloc[i]:
+        detailed_logger.info(f"Cleaned mobile for {user_email}: '{df.UserCellPhone.iloc[i]}' -> '{cleaned_mobile}'")
+    
+    record.add_field_value(Field.Contacts.last_name(), cleaned_last_name)
+    record.add_field_value(Field.Contacts.first_name(), cleaned_first_name)
+    record.add_field_value(Field('Email'), cleaned_email)
+    
+    # Only add mobile if it's valid after cleaning
+    if cleaned_mobile:
+        record.add_field_value(Field('Mobile'), cleaned_mobile)
+        detailed_logger.debug(f"Added mobile for {user_email}: {cleaned_mobile}")
+    else:
+        detailed_logger.warning(f"Skipping invalid mobile for {user_email}: {repr(df.UserCellPhone.iloc[i])}")
+    
+    # Only add LinkedIn if it's valid after cleaning
+    if cleaned_linkedin:
+        record.add_field_value(Field('LinkedIn'), cleaned_linkedin)
+    
+    record.add_field_value(Field('Acct_created_in_portal'), tz.localize(df.CreatedOn.iloc[i])) 
     
     record_field = Record()
     record_field.set_id(account_zid)
@@ -353,6 +474,7 @@ def create_new_record(df,i,account_zid,verbose = False):
 
     if response is not None:
         # Get the status code from response
+        detailed_logger.info(f"Response status code for {user_email}: {response.get_status_code()}")
         if verbose:
             print('Status Code: ' + str(response.get_status_code()))
 
@@ -372,6 +494,7 @@ def create_new_record(df,i,account_zid,verbose = False):
                     # Check if the request is successful
                     if isinstance(action_response, SuccessResponse):
                         # Get the Status
+                        detailed_logger.info(f"SUCCESS - Contact created for {user_email}: Status: {action_response.get_status().get_value()}")
                         if verbose:
                             print("Status: " + action_response.get_status().get_value())
 
@@ -381,6 +504,7 @@ def create_new_record(df,i,account_zid,verbose = False):
 
                         if verbose:
                             print("Details")
+                            print(df.UserEmail.iloc[i] )
 
                         # Get the details dict
                         details = action_response.get_details()
@@ -391,6 +515,7 @@ def create_new_record(df,i,account_zid,verbose = False):
                             
                             if key == 'id':
                                 contact_zid = value
+                                detailed_logger.info(f"Contact ID created for {user_email}: {contact_zid}")
 
                         # Get the Message
                         if verbose:
@@ -398,11 +523,22 @@ def create_new_record(df,i,account_zid,verbose = False):
 
                     # Check if the request returned an exception
                     elif isinstance(action_response, APIException):
+                        # Enhanced error logging with context
+                        error_status = action_response.get_status().get_value()
+                        error_code = action_response.get_code().get_value()
+                        error_message = action_response.get_message().get_value()
+                        
+                        detailed_logger.error(f"API_EXCEPTION - Failed to create contact for {user_email}")
+                        detailed_logger.error(f"  Account: {account_name} (ZID: {account_zid})")
+                        detailed_logger.error(f"  Status: {error_status}")
+                        detailed_logger.error(f"  Code: {error_code}")
+                        detailed_logger.error(f"  Message: {error_message}")
+                        
                         # Get the Status
-                        print("Status: " + action_response.get_status().get_value())
+                        print("Status: " + error_status)
 
                         # Get the Code
-                        print("Code: " + action_response.get_code().get_value())
+                        print("Code: " + error_code)
 
                         print("Details")
 
@@ -410,18 +546,30 @@ def create_new_record(df,i,account_zid,verbose = False):
                         details = action_response.get_details()
 
                         for key, value in details.items():
+                            detailed_logger.error(f"  Detail - {key}: {value}")
                             print(key + ' : ' + str(value))
 
                         # Get the Message
-                        print("Message: " + action_response.get_message().get_value())
+                        print("Message: " + error_message)
 
             # Check if the request returned an exception
             elif isinstance(response_object, APIException):
+                # Enhanced error logging for response-level exceptions
+                error_status = response_object.get_status().get_value()
+                error_code = response_object.get_code().get_value()
+                error_message = response_object.get_message().get_value()
+                
+                detailed_logger.error(f"RESPONSE_EXCEPTION - Failed to create contact for {user_email}")
+                detailed_logger.error(f"  Account: {account_name} (ZID: {account_zid})")
+                detailed_logger.error(f"  Status: {error_status}")
+                detailed_logger.error(f"  Code: {error_code}")
+                detailed_logger.error(f"  Message: {error_message}")
+                
                 # Get the Status
-                print("Status: " + response_object.get_status().get_value())
+                print("Status: " + error_status)
 
                 # Get the Code
-                print("Code: " + response_object.get_code().get_value())
+                print("Code: " + error_code)
 
                 print("Details")
 
@@ -429,10 +577,11 @@ def create_new_record(df,i,account_zid,verbose = False):
                 details = response_object.get_details()
 
                 for key, value in details.items():
+                    detailed_logger.error(f"  Detail - {key}: {value}")
                     print(key + ' : ' + str(value))
 
                 # Get the Message
-                print("Message: " + response_object.get_message().get_value())
+                print("Message: " + error_message)
                 
     return contact_zid
 
@@ -440,7 +589,7 @@ def create_new_record(df,i,account_zid,verbose = False):
 # In[104]:
 
 
-def update_contact_record(df,i,contact_zid, verbose = False):
+def update_contact_record(df,i,contact_zid, verbose = True):
 
         # Get instance of RecordOperations Class
         record_operations = RecordOperations()
@@ -1168,41 +1317,59 @@ SDKInitializer.initialize()
 created_contacts = 0
 updated_contacts = 0
 
-
+# Log the start of processing
+detailed_logger.info(f"Starting contact sync process for {df.shape[0]} users")
 
 for i in range(df.shape[0]):
     
-    # Check to see if email is in zoho
+    user_email = df.UserEmail.iloc[i]
+    account_name = df.AccountName.iloc[i]
+    relitix_account_id = df.RelitixAccountId.iloc[i]
     
+    detailed_logger.info(f"Processing user {i+1}/{df.shape[0]}: {user_email}")
+    
+    # Check to see if email is in zoho
     match_zid = get_records_by_email(df.UserEmail.iloc[i])
     
     if match_zid == None:
         
         #New user to zoho - add a new record
+        detailed_logger.info(f"User {user_email} not found in Zoho, creating new contact")
         
         account_zid = locate_account_zid(df.AccountName.iloc[i], df.RelitixAccountId.iloc[i],df_acct)
         if account_zid is None:
-            print('No account exists in Zoho:' + df.AccountName.iloc[i])
+            error_msg = f'No account exists in Zoho: {account_name} (Relitix ID: {relitix_account_id})'
+            detailed_logger.error(f"ACCOUNT_NOT_FOUND - {error_msg} for user {user_email}")
+            print(error_msg)
             print('User not added')
             continue
 
         contact_zid = None    
         contact_zid = create_new_record(df,i,account_zid)
         if contact_zid == None:
+            detailed_logger.error(f"CONTACT_CREATION_FAILED - No contact created for {user_email}")
             print('No contact created')
             continue
         else:
             store_zid_in_table(df,i,contact_zid)
             created_contacts +=1
+            detailed_logger.info(f"Successfully created contact for {user_email} with ID {contact_zid}")
         
     else:
         match_zid = int(match_zid)
+        detailed_logger.info(f"User {user_email} found in Zoho with ID {match_zid}, updating existing contact")
         update_contact_record(df,i,match_zid)
         store_zid_in_table(df,i,match_zid)
         updated_contacts +=1
         
         
         
+# Log final summary
+detailed_logger.info(f"Contact sync process completed:")
+detailed_logger.info(f"  Created contacts: {created_contacts}")
+detailed_logger.info(f"  Updated contacts: {updated_contacts}")
+detailed_logger.info(f"  Total processed: {created_contacts + updated_contacts}")
+
 print("Created contacts: " + str(created_contacts))
 print("Updated contacts: " + str(updated_contacts)) 
     
@@ -1235,3 +1402,8 @@ for index, (df_index, row) in enumerate(df_li.iterrows()):
     
 print("\nCompleted!")
 
+
+#
+# In[120]:
+print("Current working directory:", os.getcwd())
+# %%
