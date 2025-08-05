@@ -1,0 +1,42 @@
+# Ignore log files and temporary data
+config/*.log
+config/*.csv
+config/error_report_*.csv
+
+# Ignore Git files
+.git
+.gitignore
+
+# Ignore development and testing files
+test_*.py
+analyze_errors.py
+ENHANCED_LOGGING_README.md
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore backup files
+*.bak
+*.backup
+*~
+
+# Keep these files that ARE needed in the container:
+# python_sdk_tokens.txt (needed for Zoho authentication)
+# requirements.txt (needed for pip install)
+# Zoho_new_user_contact_sync.py or Zoho_new_user_contact_sync_docker.py (main script)
+# Dockerfile (not copied but good to document)

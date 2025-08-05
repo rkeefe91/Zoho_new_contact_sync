@@ -1,13 +1,13 @@
-# load python 3.8 dependencies using slim debian 10 image.
-FROM python:3.9-slim-bullseye
+# Use a more secure and updated Python base image
+FROM python:3.11-slim-bookworm
 
-# build variables.
+# Build variables
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Set zoho environment variable
 ENV ZOHO_INTEGRATION_PATH=/app/config
 
-# install Microsoft SQL Server requirements.
+# Install Microsoft SQL Server requirements
 ENV ACCEPT_EULA=Y
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -21,16 +21,15 @@ RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-# Add SQL Server ODBC Driver 17 for Debian 11 (Bullseye)
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-  && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+# Add SQL Server ODBC Driver 17 for Debian 12 (Bookworm)
+RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
+  && echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/debian/12/prod bookworm main" > /etc/apt/sources.list.d/mssql-release.list \
   && apt-get update \
-  && apt-get install -y --no-install-recommends --allow-unauthenticated msodbcsql17 mssql-tools \
+  && apt-get install -y --no-install-recommends msodbcsql17 mssql-tools \
   && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
   && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
-
 
 # Create app directory and copy tokens
 WORKDIR /app
@@ -40,12 +39,18 @@ COPY python_sdk_tokens.txt /app/config/
 # Copy and install Python requirements
 COPY requirements.txt .
 RUN pip install --upgrade pip \
-  && pip install -r requirements.txt
+  && pip install -r requirements.txt \
+  && pip cache purge
 
 # Copy application code (dockerignore will filter out logs)
 COPY . .
 
 # Ensure proper permissions for config directory
 RUN chmod 755 /app/config
+
+# Create non-root user for security
+RUN groupadd -r appuser && useradd -r -g appuser appuser \
+  && chown -R appuser:appuser /app
+USER appuser
 
 CMD ["python", "Zoho_new_user_contact_sync.py"]
